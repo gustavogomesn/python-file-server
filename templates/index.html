@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+  <script defer src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+  <title>File Server</title>
+</head>
+<body>
+  <main class="container">
+    
+    <div class="dropdown new-upload-dropdown">
+      <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        + New
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#newFolderModal">New Folder</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#uploadFileModal">Upload File</a></li>
+        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#uploadFolderModal">Upload Folder</a></li>
+      </ul>
+    </div>
+
+    <!-- New Folder Modal -->
+    <div class="modal fade" id="newFolderModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5">New Folder</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="{{url_for('new_folder')}}" method="POST">
+            <div class="modal-body input-group">
+                <input type="text" name="new-folder-name" class="form-control">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
+              <input type="submit" class="btn btn-dark" value="Create">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload File Modal -->
+    <div class="modal fade" id="uploadFileModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5">Upload File</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method=post enctype=multipart/form-data action="{{url_for('upload_file')}}">
+            <div class="modal-body input-group">
+              <input type=file name=file multiple="" class="form-control">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
+              <input type="submit" class="btn btn-dark" value="Upload">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Folder Modal -->
+    <div class="modal fade" id="uploadFolderModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5">Upload Folder</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method=post enctype=multipart/form-data action="{{url_for('upload_folder')}}">
+            <div class="modal-body input-group">
+              <input type=file name=folder webkitdirectory class="form-control">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
+              <input type="submit" class="btn btn-dark" value="Upload">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="files-table">
+      <div class="available-files-header">
+        <h2>Available Files</h2>
+        {% if not is_root_folder %}
+        <form action="{{url_for('previous_folder')}}">
+          <button type="submit" class="btn btn-light btn-sm">Back</button>
+        </form>
+        {% endif %}
+      </div>
+      <div class="table">
+        <div class="table-head">
+          <div class="table-col"></div>
+          <div class="table-col">Name</div>
+          <div class="table-col">Size</div>
+          <div class="table-col">Modified</div>
+          <div class="table-col"></div>
+        </div>
+        {% for folder in folders %}
+        <a 
+          href="{{url_for('files', dir=os.path.join(os.getcwd(), folder['name']))}}" 
+          class="table-row"  
+          id='{{folder["name"]}}' 
+          data-is-file="{{folder['is_file']}}"
+        >
+          <div class="table-cell file-icons"><i class="fa-solid fa-folder-open fa-2x"></i></div>
+          <div class="table-cell">{{folder['name']}}</div>
+          <div class="table-cell"></div>
+          <div class="table-cell">{{folder['modif_date']}}</div>
+          <div class="table-cell options">
+            <form action="{{ url_for('download_file', filename=folder['name']) }}" class="download-button">
+              <button type="submit"><i class="fa-regular fa-circle-down"></i></button>
+            </form>
+            <form action="{{url_for('delete', filename = folder['name'])}}" class="delete-button">
+              <button class="delete-folder-button"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </div>
+        </a>
+        {% endfor %}
+        {% for file in files %}
+        <a href="{{ url_for('open_file', filename=file['name']) }}" target="_blank" class="table-row">
+          <div class="table-cell file-icons">{{file['type']}}</div>
+          <div class="table-cell">{{ file['name'] }}</div>
+          <div class="table-cell">{{ file['size'] }}</div>
+          <div class="table-cell">{{ file['modif_date'] }}</div>
+          <div class="table-cell options">
+            <form action="{{ url_for('download_file', filename=file['name']) }}" class="download-button">
+              <button type="submit"><i class="fa-regular fa-circle-down"></i></button>
+            </form>
+            <form action="{{url_for('delete', filename=file['name'])}}" class="delete-button">
+              <button type="submit"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+  </main>
+  <script>
+    // handle click and double clicks on folders and files
+    items = document.querySelectorAll('.table-row')
+    items.forEach(row => {
+      row.addEventListener('click', e => {
+        e.preventDefault()
+        console.log(e.target)
+        // submit form if click on button or tag i inside button
+        if(e.target.localName == 'button'){
+          e.target.form.submit()
+        }
+        else if(e.target.parentNode.localName == 'button'){
+          e.target.parentNode.form.submit()
+        }
+      })
+    })
+    items.forEach(row => {
+      row.addEventListener('dblclick', e => {
+        window.location.href = e.currentTarget.href;
+      })
+    })
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+</body>
+</html>

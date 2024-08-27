@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body{
+    background-color: #252525!important;
+    color: #ddd;
+    font-family: 'inter', 'sans-serif';
+}
+
+a{
+    color: #ddd;
+    text-decoration: none;
+}
+
+li{
+    list-style: none;
+}
+
+form, i{
+    background-color: transparent!important;
+    
+}
+
+i{
+    margin: 2.5px 10px 2.5px 0px
+}
+
+.btn-light{
+    background-color: #ddd;
+}
+
+.new-upload-dropdown{
+    margin: 30px 0 20px 0;
+}
+
+
+.new-upload-button:hover{
+    background-color: white;
+    color: black;
+}
+
+.available-files-header{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.update-file-form {
+    display: block;
+    margin-bottom: 30px;
+}
+
+.available-files-header{
+    margin-bottom: 10px;
+    vertical-align: middle;
+}
+
+.table { 
+    display:table;
+    background-color: #dddddd10;
+    border-radius: 10px;
+    padding: 5px;
+}
+.table-head { display: table-row; }
+.table-col { 
+    display: table-cell;
+    padding: 2px 5px;
+}
+.table-row { 
+    display:table-row;
+    cursor: default
+}
+
+.table-row:hover{
+    background-color: rgba(128, 128, 128, 0.2);
+    transition: 0.5s;
+}
+
+.table-row:focus{
+    background-color: rgba(0, 153, 255, 0.3);
+}
+
+.table-cell { 
+    display:table-cell;
+    padding: 2px 5px;
+    text-align: left;
+    vertical-align: middle;
+    border-top: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+input[name='select-dir']{
+    display: none;
+}
+
+.file-icons i{
+    color: #ddd;
+}
+
+.options{
+    display: flex;
+    flex-direction: row;
+}
+
+.options button{
+    visibility: hidden;
+}
+
+.table-row:hover .options button{
+    visibility: visible;
+}
+
+.table-row:focus .options button{
+    visibility: visible;
+}
+
+.download-button button{
+    width: 25px;
+    background-color: transparent;
+    border: none;
+    color: rgb(54, 149, 204);
+    cursor: pointer;
+}
+
+.delete-button button{
+    width: 25px;
+    background-color: transparent;
+    border: none;
+    color: rgb(204, 54, 54);
+    cursor: pointer;
+}

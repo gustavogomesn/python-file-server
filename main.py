@@ -10,6 +10,8 @@ from get_icon_by_type import GetIconByType
 from ip_addr import IpAddr
 
 
+running_on_windows = os.name == 'nt'
+print(running_on_windows)
 get_icon_by_type = GetIconByType()
 ip_addr = IpAddr()
 app = Flask(__name__)
@@ -19,9 +21,6 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json'
     app.config['UPLOAD_FOLDER'] = content['UPLOAD_FOLDER']
     app.config['LOG_FILE'] = os.path.join(content['LOG_FOLDER'], 'file-server-activity.log')
 
-# Secret key for session management (required for flashing messages)
-app.secret_key = 'supersecretkey'
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return redirect(url_for('files'))
@@ -30,7 +29,10 @@ def home():
 @app.route('/files/<path:dir>')
 def files(dir = app.config['UPLOAD_FOLDER']):
     try:
-        os.chdir('/' + dir)
+        if running_on_windows:
+            os.chdir(dir)
+        else:
+            os.chdir('/' + dir)
     except FileNotFoundError as e:
         print(e)
         os.chdir(app.config['UPLOAD_FOLDER'])
@@ -57,7 +59,7 @@ def files(dir = app.config['UPLOAD_FOLDER']):
             files.append(aux)
     
     is_root_folder = os.getcwd() == app.config['UPLOAD_FOLDER']
-    print(ip_addr.get_domain_name(request.remote_addr))
+    # print(ip_addr.get_domain_name(request.remote_addr))
     return render_template('index.html', files=files, folders=folders, os=os, is_root_folder=is_root_folder)
 
 @app.route('/upload-file', methods=['GET', 'POST'])
@@ -73,7 +75,7 @@ def upload_file():
 
         if file:
             filename = file.filename
-            file.save(os.path.join(os.getcwd(), filename))
+            file.save(filename)
             return redirect(url_for('files', dir=os.getcwd()))
 
 @app.route('/upload-folder', methods=['GET', 'POST'])

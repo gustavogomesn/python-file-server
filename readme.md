@@ -4,8 +4,9 @@ A file explorer that works over local area network (Wi-Fi/Ethernet) using Python
 
 **Description**
 -
-Server works on,
-- Linux (Tested on Ubuntu 22)
+Server works on:
+- Linux (Tested on Ubuntu)
+- Windows
 
 **Frameworks**
 -
@@ -30,10 +31,15 @@ Now, open terminal/command prompt in the file-server directory and run the main.
 
 You will have to configure the [config.json](config.json) file with your paths,
 
-Example for Linux,
+Example for Linux:
 
     "UPLOAD_FOLDER": "/home/user/Desktop/SERVER",
     "LOG_FOLDER": "/var/log",
+
+Example for Windows:
+
+    "UPLOAD_FOLDER": "C:\\Users\\gustavo\\Desktop\\SERVER",
+    "LOG_FOLDER": "C:\\Windows\\Logs",
 
 
 This should start the Flask Server in your terminal window. By default, it is run on port 8000. You can access it by going to,
@@ -43,8 +49,8 @@ This should start the Flask Server in your terminal window. By default, it is ru
 
 - [ ] Handle exceptions
 - [ ] Activity log
-- [ ] Window compatibily
 - [ ] Hide complete path in server address
 - [ ] Delete zip files in temp directory after download a folder
-- [ ] Add breadcrumbs	
+- [ ] Add breadcrumbs
+- [ ] Fix current directory when using back button of browser
 

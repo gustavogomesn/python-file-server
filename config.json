@@ -1,5 +1,5 @@
 {
-    "UPLOAD_FOLDER": "C:\\Users\\P09649631\\Desktop\\SERVER",
-    "LOG_FOLDER": "C:\\Windows\\Logs",
+    "UPLOAD_FOLDER": "/home/gustavogomes/Desktop/SERVER",
+    "LOG_FOLDER": "/var/log",
     "MAX_CONTENT_LENGTH": 10737418240
 }

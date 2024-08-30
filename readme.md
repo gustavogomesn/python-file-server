@@ -13,7 +13,7 @@ Server works on:
 - Flask (Server)
 - Some Bootstrap 5 
 
-Double click to open folder or execute supported files, hover or select rows to able download and delete buttons
+Double click to open folder or execute supported files, hover or select rows to enable download and delete buttons
 
 **How to Run**
 -

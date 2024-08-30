@@ -92,8 +92,12 @@ input[name='select-dir']{
     display: none;
 }
 
-.file-icons i{
+/* .file-icons i{
     color: #ddd;
+} */
+
+svg{
+    background-color: transparent!important;
 }
 
 .options{

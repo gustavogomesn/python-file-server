@@ -56,10 +56,12 @@ def files(dir = app.config['UPLOAD_FOLDER']):
             aux['creation_date'] = datetime.fromtimestamp(os.path.getctime(item)).strftime("%d/%m/%Y, %H:%M:%S")
             aux['modif_date'] = datetime.fromtimestamp(os.path.getmtime(item)).strftime("%d/%m/%Y, %H:%M:%S")
             aux['type'] = get_icon_by_type.get_icon_by_type(magic.from_file(item, mime=True))
+            print(magic.from_file(item, mime=True))
             files.append(aux)
     
     is_root_folder = os.getcwd() == app.config['UPLOAD_FOLDER']
     # print(ip_addr.get_domain_name(request.remote_addr))
+    print('Estou aqui: ' + os.getcwd())
     return render_template('index.html', files=files, folders=folders, os=os, is_root_folder=is_root_folder)
 
 @app.route('/upload-file', methods=['GET', 'POST'])
@@ -75,7 +77,9 @@ def upload_file():
 
         if file:
             filename = file.filename
+            print('Antes de salvar estava aqui: ' + os.getcwd())
             file.save(filename)
+            print('Após salvar fiquei aqui: ' + os.getcwd())
             return redirect(url_for('files', dir=os.getcwd()))
 
 @app.route('/upload-folder', methods=['GET', 'POST'])
@@ -140,6 +144,13 @@ def delete(filename):
             
         
     return redirect(url_for('files', dir=os.getcwd()))
+
+# the page refresh every time back or foward button of browser is clicked to avoid out of sync of current dir
+# obviously was chatgpt who generate this
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store'
+    return response
 
 # @app.errorhandler(404)
 # def page_not_found(e):

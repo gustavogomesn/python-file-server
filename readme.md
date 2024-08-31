@@ -49,8 +49,8 @@ This should start the Flask Server in your terminal window. By default, it is ru
 
 - [ ] Handle exceptions
 - [ ] Activity log
-- [ ] Hide complete path in server address
 - [ ] Delete zip files in temp directory after download a folder
 - [ ] Add breadcrumbs
-- [ ] Fix current directory when using back button of browser
+- [ ] Rename folders and files
+- [ ] Define table width
 
